@@ -33,9 +33,9 @@ while True:
             dist3 = (Zx - 0.5) * (Zx - 0.5) + (Zy + s3d2) * (Zy + s3d2)
             if (dist1 > dist2) & (dist1 > dist3):
                 screen += "██"
-            if (dist2 > dist1) & (dist2 > dist3):
+            elif (dist2 > dist1) & (dist2 > dist3):
                 screen += "▓▓"
-            if (dist3 > dist2) & (dist3 > dist1):
+            elif (dist3 > dist2) & (dist3 > dist1):
                 screen += "▒▒"
 
         screen += "\n"
