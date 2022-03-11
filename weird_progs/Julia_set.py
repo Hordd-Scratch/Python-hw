@@ -1,7 +1,7 @@
 import os
 # 131 61
-screen_width = 70
-screen_height = 25
+screen_width = 131
+screen_height = 61
 cs = -2 + 1j
 ce = -cs
 scaleX = (ce.real - cs.real) / screen_width
