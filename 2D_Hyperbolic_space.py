@@ -3,7 +3,7 @@ import numpy as np
 import pygame
 from typing import List, Any
 
-
+# функции
 def polar_vector(r: float, theta: float) -> List[float]:
     return [math.cosh(r),
             math.sinh(r) * math.cos(theta),
