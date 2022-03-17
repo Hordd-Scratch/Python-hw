@@ -10,6 +10,7 @@ from collections import Counter
 from string import punctuation
 from typing import List
 
+
 # All functions have been written to work with the given text.
 
 
@@ -31,7 +32,7 @@ def get_longest_diverse_words(file_path: str) -> List[str]:
     # -> Split into words -> Create set with unique words.
 
     for (
-        word
+            word
     ) in uniq_words:  # Create list with tuples of word and its unique symbols' amount.
         uniq_sym_amount = len(set(word.lower()))
         words_length.append((uniq_sym_amount, word))

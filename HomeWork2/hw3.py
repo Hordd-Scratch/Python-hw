@@ -17,6 +17,7 @@ assert combinations([1, 2], [3, 4]) == [
 from typing import List, Any
 
 
+# function that takes K lists as arguments and returns all possible lists of K items
 def combinations(args: List[Any]) -> List[List]:
     a = iter(args)
     part = object()
