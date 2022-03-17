@@ -4,6 +4,7 @@ import numpy as np
 import pygame
 from typing import List, Any
 
+
 # функции
 def polar_vector(r: float, theta: float) -> List[float]:
     return [math.cosh(r),
@@ -80,12 +81,54 @@ def matrix_mult_matrix(matrix_a: List[list], matrix_b: List[list]) -> List[list]
     return result
 
 
-
-
-
-branch_lenght = 1.255
-depth = 4
+branch_length = 1.255
+depth = 3
 pi = math.pi
+
+
+def draw_4_5_tiling(current_transform: List[list]):
+    transform_copy = current_transform
+    for i in range(5):
+        transform_copy = matrix_mult_matrix(rotation_matrix(2 * pi / 5), transform_copy)
+        draw_3branch_sector(transform_copy, 0)
+
+
+def draw_3branch_sector(current_transform: List[list], current_depth: int):
+    draw_line(current_transform, 0, branch_length)
+    transform_copy = current_transform
+    transform_copy = matrix_mult_matrix(translation_matrix_z(branch_length), transform_copy)
+    transform_copy = matrix_mult_matrix(rotation_matrix(pi), transform_copy)
+    if current_depth < depth:
+        transform_copy = matrix_mult_matrix(rotation_matrix(2 * pi / 5), transform_copy)
+        draw_2branch_sector(transform_copy, current_depth + 1)
+        transform_copy = matrix_mult_matrix(rotation_matrix(2 * pi / 5), transform_copy)
+        draw_3branch_sector(transform_copy, current_depth + 1)
+        transform_copy = matrix_mult_matrix(rotation_matrix(2 * pi / 5), transform_copy)
+        draw_3branch_sector(transform_copy, current_depth + 1)
+
+
+def draw_2branch_sector(current_transform: List[list], current_depth: int):
+    draw_line(current_transform, 0, branch_length)
+    transform_copy = current_transform
+    transform_copy = matrix_mult_matrix(translation_matrix_z(branch_length), transform_copy)
+    transform_copy = matrix_mult_matrix(rotation_matrix(pi), transform_copy)
+    if current_depth < depth:
+        transform_copy = matrix_mult_matrix(rotation_matrix(2 * pi / 5), transform_copy)
+        draw_line(transform_copy, 0, branch_length)
+        transform_copy = matrix_mult_matrix(rotation_matrix(2 * pi / 5), transform_copy)
+        draw_2branch_sector(transform_copy, current_depth + 1)
+        transform_copy = matrix_mult_matrix(rotation_matrix(2 * pi / 5), transform_copy)
+        draw_3branch_sector(transform_copy, current_depth + 1)
+
+
+def transform_matrix(current_transform: List[list], theta: float, choice: int) -> List[list]:
+    if choice == 0:
+        current_transform = matrix_mult_matrix(current_transform, translation_matrix_z(theta))
+    elif choice == 1:
+        current_transform = matrix_mult_matrix(current_transform, translation_matrix_y(theta))
+    elif choice == 2:
+        current_transform = matrix_mult_matrix(current_transform, rotation_matrix(theta))
+    return current_transform
 
 
 WIDTH = 500
@@ -104,8 +147,8 @@ clock = pygame.time.Clock()
 
 # Цикл игры
 running = True
-position = [0, 0]
-speed = [0, 0]
+speed = [0, 0, 0]
+transform = rotation_matrix(0)
 while running:
     # Держим цикл на правильной скорости
     clock.tick(FPS)
@@ -116,13 +159,17 @@ while running:
             running = False
         elif event.type == pygame.KEYDOWN:
             if event.key == pygame.K_a:
-                speed[0] = -0.02
+                speed[0] = -1
             elif event.key == pygame.K_d:
-                speed[0] = 0.02
+                speed[0] = 1
             elif event.key == pygame.K_s:
-                speed[1] = 0.02
+                speed[1] = -1
             elif event.key == pygame.K_w:
-                speed[1] = -0.02
+                speed[1] = 1
+            elif event.key == pygame.K_q:
+                speed[2] = -1
+            elif event.key == pygame.K_e:
+                speed[2] = 1
         if event.type == pygame.KEYUP:
             if event.key == pygame.K_a:
                 speed[0] = 0
@@ -132,25 +179,32 @@ while running:
                 speed[1] = 0
             elif event.key == pygame.K_w:
                 speed[1] = 0
+            elif event.key == pygame.K_q:
+                speed[2] = 0
+            elif event.key == pygame.K_e:
+                speed[2] = 0
     # Обновление
-    position[0] += speed[0]
-    position[1] += speed[1]
+    speed_value = 0.02
+    if speed[0] != 0:
+        transform = transform_matrix(transform, -speed[0] * speed_value, 0)
+    if speed[1] != 0:
+        transform = transform_matrix(transform, speed[1] * speed_value, 1)
+    if speed[2] != 0:
+        transform = transform_matrix(transform, -speed[2] * speed_value * 2, 2)
     # Рендеринг
     screen.fill(BLACK)
     pygame.draw.circle(screen, WHITE, (WIDTH / 2, HEIGHT / 2), min(WIDTH, HEIGHT) / 2, 2)
 
-    transform_y = translation_matrix_y(position[1])
-    transform_z = translation_matrix_z(position[0])
-    transform = matrix_mult_matrix(transform_z, transform_y)
     transform_copy = transform
-    for a in range(4):
-        transform_copy = matrix_mult_matrix(rotation_matrix(pi * a / 2), transform)
-        transform_copy_2 = transform_copy
-        for i in range(10):
-            draw_line(transform_copy_2, 0, 0.5)
-            transform_copy_2 = matrix_mult_matrix(translation_matrix_z(1), transform_copy_2)
 
+    # for a in range(4):
+    #     transform_copy = matrix_mult_matrix(rotation_matrix(pi * a / 2), transform)
+    #     transform_copy_2 = transform_copy
+    #     for i in range(10):
+    #         draw_line(transform_copy_2, 0, 0.5)
+    #         transform_copy_2 = matrix_mult_matrix(translation_matrix_z(1), transform_copy_2)
 
+    draw_4_5_tiling(transform_copy)
     # После отрисовки всего, переворачиваем экран
     pygame.display.flip()
 
