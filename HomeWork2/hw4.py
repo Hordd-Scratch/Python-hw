@@ -25,6 +25,6 @@ from functools import lru_cache
 def func(a, b):
     return (a ** b) ** 2
 
-for i in range(10):
-    print([func(n, n+1) for n in range(10)])
 
+for i in range(10):
+    print([func(n, n + 1) for n in range(10)])
