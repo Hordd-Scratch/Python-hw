@@ -41,12 +41,6 @@ B = A
 C = A
 D = A
 
-# checking for lists length conditions
-assert len(A) >= 0 & len(A) <= 1000
-assert len(B) >= 0 & len(B) <= 1000
-assert len(C) >= 0 & len(C) <= 1000
-assert len(D) >= 0 & len(D) <= 1000
-
 # Setting random values in lists
 A = set_rand_list(A)
 B = set_rand_list(B)
