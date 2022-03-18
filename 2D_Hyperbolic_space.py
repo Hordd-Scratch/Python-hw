@@ -2,10 +2,9 @@
 import math
 import numpy as np
 import pygame
-from typing import List, Any
+from typing import List
 
 
-# функции
 def polar_vector(r: float, theta: float) -> List[float]:
     return [math.cosh(r),
             math.sinh(r) * math.cos(theta),
@@ -13,7 +12,7 @@ def polar_vector(r: float, theta: float) -> List[float]:
 
 
 def project_on_to_poincare_disc(point: List[float]) -> List[float]:
-    scale = min(WIDTH - 1, HEIGHT-1) / 2 / (point[0] + 1)
+    scale = min(WIDTH - 1, HEIGHT - 1) / 2 / (point[0] + 1)
     return [point[1] * scale,
             point[2] * scale,
             0]
@@ -29,7 +28,9 @@ def vector_mult_matrix(vector: List[float], matrix: List[list]) -> List[float]:
 
 def draw_line(current_transform: List[list], angle: float, line_lenght: float):
     prev_point = [0, 0, 0]
-    inc = 0.0999
+    inc = line_lenght / 10.0 - 0.0001
+    if inc < 0.0999:
+        inc = 0.0999
     i = 0
     whd = min(WIDTH, HEIGHT) / 2
     while i < line_lenght:
@@ -81,61 +82,73 @@ def matrix_mult_matrix(matrix_a: List[list], matrix_b: List[list]) -> List[list]
     return result
 
 
-branch_length = 1.255
-depth = 4
 pi = math.pi
-rot_pi = rotation_matrix(pi)
-rot_2_pi_div_5 = rotation_matrix(2 * pi / 5)
-translate = translation_matrix_z(branch_length)
 
 
-def draw_4_5_tiling(current_transform: List[list]):
+def draw_4_5_tiling(current_transform: List[list], depth: int):
+    branch_length = 1.255
+
+    def draw_3branch_sector(current_transform: List[list], current_depth: int):
+        draw_line(current_transform, 0, branch_length)
+        transform_copy = current_transform
+        transform_copy = matrix_mult_matrix(translation_matrix_z(branch_length), transform_copy)
+        transform_copy = matrix_mult_matrix(rotation_matrix(pi), transform_copy)
+        if current_depth < depth:
+            transform_copy = matrix_mult_matrix(rotation_matrix(2 * pi / 5), transform_copy)
+            draw_2branch_sector(transform_copy, current_depth + 1)
+            transform_copy = matrix_mult_matrix(rotation_matrix(2 * pi / 5), transform_copy)
+            draw_3branch_sector(transform_copy, current_depth + 1)
+            transform_copy = matrix_mult_matrix(rotation_matrix(2 * pi / 5), transform_copy)
+            draw_3branch_sector(transform_copy, current_depth + 1)
+
+    def draw_2branch_sector(current_transform: List[list], current_depth: int):
+        draw_line(current_transform, 0, branch_length)
+        transform_copy = current_transform
+        transform_copy = matrix_mult_matrix(translation_matrix_z(branch_length), transform_copy)
+        transform_copy = matrix_mult_matrix(rotation_matrix(pi), transform_copy)
+        if current_depth < depth:
+            transform_copy = matrix_mult_matrix(rotation_matrix(2 * pi / 5), transform_copy)
+            draw_line(transform_copy, 0, branch_length)
+            transform_copy = matrix_mult_matrix(rotation_matrix(2 * pi / 5), transform_copy)
+            draw_2branch_sector(transform_copy, current_depth + 1)
+            transform_copy = matrix_mult_matrix(rotation_matrix(2 * pi / 5), transform_copy)
+            draw_3branch_sector(transform_copy, current_depth + 1)
+
     transform_copy = current_transform
     for i in range(5):
-        transform_copy = matrix_mult_matrix(rot_2_pi_div_5, transform_copy)
+        transform_copy = matrix_mult_matrix(rotation_matrix(2 * pi / 5), transform_copy)
         draw_3branch_sector(transform_copy, 0)
 
 
-def draw_3branch_sector(current_transform: List[list], current_depth: int):
-    draw_line(current_transform, 0, branch_length)
-    transform_copy = current_transform
-    transform_copy = matrix_mult_matrix(translate, transform_copy)
-    transform_copy = matrix_mult_matrix(rot_pi, transform_copy)
-    if current_depth < depth:
-        transform_copy = matrix_mult_matrix(rot_2_pi_div_5, transform_copy)
-        draw_2branch_sector(transform_copy, current_depth + 1)
-        transform_copy = matrix_mult_matrix(rot_2_pi_div_5, transform_copy)
-        draw_3branch_sector(transform_copy, current_depth + 1)
-        transform_copy = matrix_mult_matrix(rot_2_pi_div_5, transform_copy)
-        draw_3branch_sector(transform_copy, current_depth + 1)
+def draw_inf_n_tiling(current_transform: List[list], n: int, depth: int):
+    lenghts = [1, 1, 1.2, 1.8, 2.3, 2.7, 3, 3.3, 3.5]
+    branch_length = lenghts[n - 1]
 
+    def draw_2branch_sector(current_transform: List[list], current_depth: int):
+        draw_line(current_transform, 0, branch_length)
+        transform_copy = current_transform
+        transform_copy = matrix_mult_matrix(translation_matrix_z(branch_length), transform_copy)
+        transform_copy = matrix_mult_matrix(rotation_matrix(pi), transform_copy)
+        if current_depth < depth:
+            for i in range(n - 1):
+                transform_copy = matrix_mult_matrix(rotation_matrix(2 * pi / n), transform_copy)
+                draw_2branch_sector(transform_copy, current_depth + 1)
 
-def draw_2branch_sector(current_transform: List[list], current_depth: int):
-    draw_line(current_transform, 0, branch_length)
     transform_copy = current_transform
-    transform_copy = matrix_mult_matrix(translate, transform_copy)
-    transform_copy = matrix_mult_matrix(rot_pi, transform_copy)
-    if current_depth < depth:
-        transform_copy = matrix_mult_matrix(rot_2_pi_div_5, transform_copy)
-        draw_line(transform_copy, 0, branch_length)
-        transform_copy = matrix_mult_matrix(rot_2_pi_div_5, transform_copy)
-        draw_2branch_sector(transform_copy, current_depth + 1)
-        transform_copy = matrix_mult_matrix(rot_2_pi_div_5, transform_copy)
-        draw_3branch_sector(transform_copy, current_depth + 1)
+    for i in range(n):
+        transform_copy = matrix_mult_matrix(rotation_matrix(2 * pi / n), transform_copy)
+        draw_2branch_sector(transform_copy, 0)
 
 
 def draw_collatz(current_transform: List[list], current_depth: int, number: int):
     draw_line(current_transform, 0, 0.34)
     transform_copy = current_transform
-
     transform_copy = matrix_mult_matrix(translation_matrix_z(0.34), transform_copy)
-    transform_copy = matrix_mult_matrix(rot_pi, transform_copy)
-
+    transform_copy = matrix_mult_matrix(rotation_matrix(pi), transform_copy)
     transform_copy_2 = transform_copy
-
     num3 = (number - 1) / 3.0
     angle = pi
-    if current_depth < 20:
+    if current_depth < 22:
         if (num3 % 2 == 1.0) & (num3 != 1):
             angle = pi - 0.5
             transform_copy_2 = matrix_mult_matrix(rotation_matrix(-angle), transform_copy_2)
@@ -156,28 +169,24 @@ def transform_matrix(current_transform: List[list], theta: float, choice: int) -
 
 WIDTH = 500
 HEIGHT = 500
-FPS = 60
+FPS = 30
 
 BLACK = (0, 0, 0)
 WHITE = (255, 255, 255)
 
-# Создаем игру и окно
 pygame.init()
 pygame.mixer.init()
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption("Hyperbolica")
 clock = pygame.time.Clock()
 
-# Цикл игры
 running = True
 speed = [0, 0, 0]
 transform = rotation_matrix(0)
+press = 0
 while running:
-    # Держим цикл на правильной скорости
     clock.tick(FPS)
-    # Ввод процесса (события)
     for event in pygame.event.get():
-        # check for closing window
         if event.type == pygame.QUIT:
             running = False
         elif event.type == pygame.KEYDOWN:
@@ -193,6 +202,8 @@ while running:
                 speed[2] = -1
             elif event.key == pygame.K_e:
                 speed[2] = 1
+            elif event.key == pygame.K_SPACE:
+                press += 1
         if event.type == pygame.KEYUP:
             if event.key == pygame.K_a:
                 speed[0] = 0
@@ -206,31 +217,40 @@ while running:
                 speed[2] = 0
             elif event.key == pygame.K_e:
                 speed[2] = 0
-    # Обновление
-    speed_value = 0.04
+
+    speed_value = 0.06
     if speed[0] != 0:
         transform = transform_matrix(transform, -speed[0] * speed_value, 0)
     if speed[1] != 0:
         transform = transform_matrix(transform, speed[1] * speed_value, 1)
     if speed[2] != 0:
         transform = transform_matrix(transform, -speed[2] * speed_value * 2, 2)
-    # Рендеринг
+
     screen.fill(BLACK)
     pygame.draw.circle(screen, WHITE, (WIDTH / 2, HEIGHT / 2), min(WIDTH, HEIGHT) / 2, 1)
-
     transform_copy = transform
     # hrustyashiy
-    for a in range(50):
-        transform_copy = matrix_mult_matrix(rotation_matrix(pi * a / 25), transform)
-        transform_copy_2 = transform_copy
-        for i in range(5):
-            draw_line(transform_copy_2, 0, 0.5)
-            transform_copy_2 = matrix_mult_matrix(translation_matrix_z(1), transform_copy_2)
+    choice = press % 7
+    if choice == 0:
+        for a in range(50):
+            transform_copy = matrix_mult_matrix(rotation_matrix(pi * a / 25), transform)
+            transform_copy_2 = transform_copy
+            for i in range(5):
+                draw_line(transform_copy_2, 0, 0.5)
+                transform_copy_2 = matrix_mult_matrix(translation_matrix_z(1), transform_copy_2)
+    elif choice == 1:
+        draw_4_5_tiling(transform_copy, 3)
+    elif choice == 2:
+        draw_inf_n_tiling(transform_copy, 3, 6)
+    elif choice == 3:
+        draw_inf_n_tiling(transform_copy, 4, 3)
+    elif choice == 4:
+        draw_inf_n_tiling(transform_copy, 5, 2)
+    elif choice == 5:
+        draw_inf_n_tiling(transform_copy, 6, 2)
+    elif choice == 6:
+        draw_collatz(transform_copy, 0, 1)
 
-    # draw_4_5_tiling(transform_copy)
-    # draw_collatz(transform_copy, 0, 1)
-
-    # После отрисовки всего, переворачиваем экран
     pygame.display.flip()
 
 pygame.quit()
