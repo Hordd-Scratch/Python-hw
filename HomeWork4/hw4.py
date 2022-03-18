@@ -28,10 +28,7 @@ def is_armstrong(number: int) -> int:
 
     list_digits = list(map(exponentiation, list_digits))
     sum_digits = sum(list_digits)
-    if sum_digits == number:
-        return True
-    else:
-        return False
+    return sum_digits == number
 
 
 assert is_armstrong(153) == True, 'Is Armstrong number'
