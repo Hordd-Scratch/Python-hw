@@ -29,7 +29,7 @@ def vector_mult_matrix(vector: List[float], matrix: List[list]) -> List[float]:
 
 def draw_line(current_transform: List[list], angle: float, line_lenght: float):
     prev_point = [0, 0, 0]
-    inc = 0.1
+    inc = 0.2
     i = 0
     whd = min(WIDTH, HEIGHT) / 2
     while i < line_lenght:
@@ -82,43 +82,72 @@ def matrix_mult_matrix(matrix_a: List[list], matrix_b: List[list]) -> List[list]
 
 
 branch_length = 1.255
-depth = 3
+depth = 5
 pi = math.pi
-
+rot_pi = rotation_matrix(pi)
+rot_2_pi_div_5 = rotation_matrix(2 * pi / 5)
+translate = translation_matrix_z(branch_length)
 
 def draw_4_5_tiling(current_transform: List[list]):
     transform_copy = current_transform
     for i in range(5):
-        transform_copy = matrix_mult_matrix(rotation_matrix(2 * pi / 5), transform_copy)
+        transform_copy = matrix_mult_matrix(rot_2_pi_div_5, transform_copy)
         draw_3branch_sector(transform_copy, 0)
 
 
 def draw_3branch_sector(current_transform: List[list], current_depth: int):
     draw_line(current_transform, 0, branch_length)
     transform_copy = current_transform
-    transform_copy = matrix_mult_matrix(translation_matrix_z(branch_length), transform_copy)
-    transform_copy = matrix_mult_matrix(rotation_matrix(pi), transform_copy)
+    transform_copy = matrix_mult_matrix(translate, transform_copy)
+    transform_copy = matrix_mult_matrix(rot_pi, transform_copy)
     if current_depth < depth:
-        transform_copy = matrix_mult_matrix(rotation_matrix(2 * pi / 5), transform_copy)
+        transform_copy = matrix_mult_matrix(rot_2_pi_div_5, transform_copy)
         draw_2branch_sector(transform_copy, current_depth + 1)
-        transform_copy = matrix_mult_matrix(rotation_matrix(2 * pi / 5), transform_copy)
+        transform_copy = matrix_mult_matrix(rot_2_pi_div_5, transform_copy)
         draw_3branch_sector(transform_copy, current_depth + 1)
-        transform_copy = matrix_mult_matrix(rotation_matrix(2 * pi / 5), transform_copy)
+        transform_copy = matrix_mult_matrix(rot_2_pi_div_5, transform_copy)
         draw_3branch_sector(transform_copy, current_depth + 1)
 
 
 def draw_2branch_sector(current_transform: List[list], current_depth: int):
     draw_line(current_transform, 0, branch_length)
     transform_copy = current_transform
-    transform_copy = matrix_mult_matrix(translation_matrix_z(branch_length), transform_copy)
-    transform_copy = matrix_mult_matrix(rotation_matrix(pi), transform_copy)
+    transform_copy = matrix_mult_matrix(translate, transform_copy)
+    transform_copy = matrix_mult_matrix(rot_pi, transform_copy)
     if current_depth < depth:
-        transform_copy = matrix_mult_matrix(rotation_matrix(2 * pi / 5), transform_copy)
+        transform_copy = matrix_mult_matrix(rot_2_pi_div_5, transform_copy)
         draw_line(transform_copy, 0, branch_length)
-        transform_copy = matrix_mult_matrix(rotation_matrix(2 * pi / 5), transform_copy)
+        transform_copy = matrix_mult_matrix(rot_2_pi_div_5, transform_copy)
         draw_2branch_sector(transform_copy, current_depth + 1)
-        transform_copy = matrix_mult_matrix(rotation_matrix(2 * pi / 5), transform_copy)
+        transform_copy = matrix_mult_matrix(rot_2_pi_div_5, transform_copy)
         draw_3branch_sector(transform_copy, current_depth + 1)
+
+
+# void drawCollatz(Matrix4x4 currentTransform, int depth, long number, Color Clr)
+#         {
+#             byte[] coord = StrConvert(number);
+#             float branchLength = 0.34f;
+#             HyperbolicLine(coord, currentTransform, 0, branchLength, branchLength-0.0001f, Clr);
+#             Matrix4x4 transformCopy = currentTransform;
+#
+#             transformCopy = PolarTransform.TranslationMatrixY(branchLength) * transformCopy;
+#             transformCopy = PolarTransform.RotationMatrix(pi) * transformCopy;
+#
+#             Matrix4x4 transformCopy2 = transformCopy;
+#             float Num3 = (number - 1) / 3f;
+#             float angle = pi;
+#             if (depth < 35)
+#             {
+#                 if (Num3 % 2 == 1 && Num3 != 1)
+#                 {
+#                     angle = pi-0.5f;
+#                     transformCopy2 = PolarTransform.RotationMatrix(-angle) * transformCopy2;
+#                     drawCollatz(transformCopy2, depth + 1, (int)Num3, Clr);
+#                 }
+#                 transformCopy = PolarTransform.RotationMatrix(angle) * transformCopy;
+#                 drawCollatz(transformCopy, depth + 1, number * 2, Clr);
+#             }
+#         }
 
 
 def transform_matrix(current_transform: List[list], theta: float, choice: int) -> List[list]:
@@ -184,7 +213,7 @@ while running:
             elif event.key == pygame.K_e:
                 speed[2] = 0
     # Обновление
-    speed_value = 0.02
+    speed_value = 0.04
     if speed[0] != 0:
         transform = transform_matrix(transform, -speed[0] * speed_value, 0)
     if speed[1] != 0:
@@ -197,11 +226,11 @@ while running:
 
     transform_copy = transform
 
-    # for a in range(4):
-    #     transform_copy = matrix_mult_matrix(rotation_matrix(pi * a / 2), transform)
+    # for a in range(200):
+    #     transform_copy = matrix_mult_matrix(rotation_matrix(pi * a / 100), transform)
     #     transform_copy_2 = transform_copy
-    #     for i in range(10):
-    #         draw_line(transform_copy_2, 0, 0.5)
+    #     for i in range(5):
+    #         draw_line(transform_copy_2, 0, 0.3)
     #         transform_copy_2 = matrix_mult_matrix(translation_matrix_z(1), transform_copy_2)
 
     draw_4_5_tiling(transform_copy)
