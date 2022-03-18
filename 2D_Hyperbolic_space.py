@@ -31,6 +31,8 @@ def draw_line(current_transform: List[list], angle: float, line_lenght: float):
     inc = line_lenght / 10.0 - 0.0001
     if inc < 0.0999:
         inc = 0.0999
+    if inc > 0.4999:
+        inc = 0.2999
     i = 0
     whd = min(WIDTH, HEIGHT) / 2
     while i < line_lenght:
@@ -121,7 +123,7 @@ def draw_4_5_tiling(current_transform: List[list], depth: int):
 
 
 def draw_inf_n_tiling(current_transform: List[list], n: int, depth: int):
-    lenghts = [1, 1, 1.2, 1.8, 2.3, 2.7, 3, 3.3, 3.5]
+    lenghts = [1, 1, 1.4, 1.9, 2.4, 2.8, 3.1, 3.4, 3.6]
     branch_length = lenghts[n - 1]
 
     def draw_2branch_sector(current_transform: List[list], current_depth: int):
@@ -232,12 +234,11 @@ while running:
     # hrustyashiy
     choice = press % 7
     if choice == 0:
-        for a in range(50):
-            transform_copy = matrix_mult_matrix(rotation_matrix(pi * a / 25), transform)
+        for a in range(40):
+            transform_copy = matrix_mult_matrix(rotation_matrix(pi * a / 20), transform)
             transform_copy_2 = transform_copy
             for i in range(5):
-                draw_line(transform_copy_2, 0, 0.5)
-                transform_copy_2 = matrix_mult_matrix(translation_matrix_z(1), transform_copy_2)
+                draw_line(transform_copy_2, 0, 10)
     elif choice == 1:
         draw_4_5_tiling(transform_copy, 3)
     elif choice == 2:
