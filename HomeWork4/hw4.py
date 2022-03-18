@@ -17,14 +17,14 @@ Write a function that detects if a number is Armstrong number in functionaly sty
 ### Example function signature and call
 """
 
-
-def is_armstrong(number: int) -> int:
-    str_digits = str(number)
-    lenght_number = len(str_digits)
-    if sum([int(a)**lenght_number for a in str_digits]) == number:
-        return True
-    else:
-        return False
+# BAN
+# def is_armstrong(number: int) -> int:
+#     str_digits = str(number)
+#     lenght_number = len(str_digits)
+#     if sum([int(a)**lenght_number for a in str_digits]) == number:
+#         return True
+#     else:
+#         return False
 
 
 assert is_armstrong(153) == True, 'Is Armstrong number'
