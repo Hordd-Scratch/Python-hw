@@ -28,7 +28,3 @@ def combinations(args: List[Any]) -> List[List]:
             break
         res = [r + [i] for r in res for i in temp]
     return res
-
-
-abc = [[1, 2], [3, 4], [5, 6]]
-print(combinations(abc))
