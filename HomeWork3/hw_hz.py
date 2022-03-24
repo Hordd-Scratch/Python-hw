@@ -23,11 +23,3 @@
 #     >>> f()
 #     ? 2
 #     '2'
-from functools import cache
-
-
-@cache(times=2)
-def f():
-    return input('? ')
-
-f()
