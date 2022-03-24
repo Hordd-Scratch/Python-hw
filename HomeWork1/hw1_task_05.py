@@ -20,8 +20,3 @@ def find_maximal_subarray_sum(nums: List[int], k: int) -> int:
         if sub_sum > max_sum:
             max_sum = sub_sum
     return max_sum
-
-
-Numbers = [1, 3, -1, -3, 5, 3, 6, 7]
-print(Numbers)
-print(find_maximal_subarray_sum(Numbers, 3))
