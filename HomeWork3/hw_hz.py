@@ -26,8 +26,8 @@
 from functools import cache
 
 
-@cache(times=3)
+@cache(times=2)
 def f():
-    return raw_input('? ')
+    return input('? ')
 
 f()
