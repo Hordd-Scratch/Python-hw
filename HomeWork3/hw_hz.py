@@ -1,13 +1,11 @@
 # In previous homework task 4, you wrote a cache function that remembers other function output value.
 # Modify it to be a parametrized decorator, so that the following code::
-from functools import cache
-
-
-@cache(times=3)
-def some_function():
-    pass
-
-
+#
+#     @cache(times=3)
+#     def some_function():
+#         pass
+#
+#
 # Would give out cached value up to `times` number only.
 # Example::
 #
@@ -25,3 +23,11 @@ def some_function():
 #     >>> f()
 #     ? 2
 #     '2'
+from functools import cache
+
+
+@cache(times=3)
+def f():
+    return raw_input('? ')
+
+f()
