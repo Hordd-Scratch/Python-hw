@@ -10,6 +10,3 @@ class Homework(ABC):
 
     def is_active(self):
         return self.created + self.deadline >= datetime.datetime.now()
-
-
-
