@@ -18,6 +18,7 @@ Write a function that detects if a number is Armstrong number in functionaly sty
 """
 
 
+# A function that checks whether a number is an Armstrong number
 def is_armstrong(number: int) -> int:
     list_str_digits = str(number)
     number_lenght = len(list_str_digits)
@@ -29,7 +30,3 @@ def is_armstrong(number: int) -> int:
     list_digits = list(map(exponentiation, list_digits))
     sum_digits = sum(list_digits)
     return sum_digits == number
-
-
-assert is_armstrong(153) == True, 'Is Armstrong number'
-assert is_armstrong(10) == False, 'Is not Armstrong number'
