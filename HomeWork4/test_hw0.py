@@ -1,5 +1,5 @@
 import pytest
-from hw_hz import is_armstrong
+from hw0 import is_armstrong
 
 
 @pytest.mark.parametrize("a, expected_result",
