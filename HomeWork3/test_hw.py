@@ -3,7 +3,7 @@
 
 
 # @pytest.mark.parametrize("value",[(100,40000)])
-# def test cashe(value: int)
+# def test_cashe(value: int)
 #     first_time = time.time()
 #     actual_result = fun(*value)
 #     print(f"\nFirst call: {str(time.time() - first_time)}")
