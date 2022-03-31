@@ -25,6 +25,18 @@ You will learn:
 **** https://docs.python.org/3/tutorial/errors.html#raising-exceptions
 """
 
+# A function that checks the first line of a file for whether it is a number in an interval [1, 3)
+def read_magic_number(file_path: str) -> bool:
+    file = open(file_path, 'r')
+    line = file.readline()
+    print(line)
+    file.close()
+    try:
+        num = float(line)
+    except ValueError:
+        return False
+    if 1 <= num < 3:
+        return True
+    else:
+        return False
 
-def read_magic_number(path: str) -> bool:
-    ...
