@@ -1,15 +1,22 @@
-import sys
 import pytest
 from hw3 import my_precious_logger
 
 
 @pytest.mark.parametrize("text",
-                         [("error: file not found")])
-def test_my_precious_logger_stderr(text):
-    ...
+                         ["error: file not found",
+                          "error: aboba",
+                          "error: error"])
+def test_my_precious_logger_err(text, capsys):
+    my_precious_logger(text)
+    out, err = capsys.readouterr()
+    assert err == text + "\n"
 
 
 @pytest.mark.parametrize("text",
-                         [("OK")])
-def test_my_precious_logger_stdout(text):
-    ...
+                         ["eor: filund",
+                          "OK",
+                          "kjrgblauebg"])
+def test_my_precious_logger_out(text, capsys):
+    my_precious_logger(text)
+    out, err = capsys.readouterr()
+    assert out == text + "\n"
