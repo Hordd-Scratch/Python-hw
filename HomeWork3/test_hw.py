@@ -1,15 +1,13 @@
-# import pytest
-# import time
+import pytest
+from hw_hz import square
 
 
-# @pytest.mark.parametrize("value",[(100,40000)])
-# def test_cashe(value: int)
-#     first_time = time.time()
-#     actual_result = fun(*value)
-#     print(f"\nFirst call: {str(time.time() - first_time)}")
-#     second_time = time.time()
-#     expected_result = fun(*value)
-#     print(f"Second call: {format(str(time.time() - second_time))}")
-#     assert actual_result is expected_result
-
-# IDK
+@pytest.mark.parametrize("value",
+                         [(3, 9),
+                          (2, 4),
+                          (5, 25),
+                          (10, 100),
+                          (15, 225)])
+def test_square(a, expected_result):
+    assert square(a) == expected_result
+    pass
