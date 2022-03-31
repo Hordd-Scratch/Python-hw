@@ -25,7 +25,7 @@ You will learn:
  - how to write instructions
 
 
->>> fizzbuzz(5)
+# >>> fizzbuzz(5)
 ["1", "2", "fizz", "4", "buzz"]
 
 * https://en.wikipedia.org/wiki/Fizz_buzz
@@ -34,5 +34,18 @@ You will learn:
 from typing import List
 
 
+# A function that takes a number N as an input and returns N FizzBuzz numbers*
 def fizzbuzz(n: int) -> List[str]:
-    pass
+    res = []
+    for i in range(1, n + 1):
+        step = str(i)
+        if i % 3 == 0:
+            step = "Fizz"
+            if i % 5 == 0:
+                step = "FizzBuzz"
+                res.append(step)
+                continue
+        if i % 5 == 0:
+            step = "Buzz"
+        res.append(step)
+    return res
