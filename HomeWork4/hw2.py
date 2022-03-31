@@ -25,6 +25,7 @@ You will learn:
 **** https://docs.python.org/3/tutorial/errors.html#raising-exceptions
 """
 
+
 # A function that checks the first line of a file for whether it is a number in an interval [1, 3)
 def read_magic_number(file_path: str) -> bool:
     file = open(file_path, 'r')
@@ -39,4 +40,3 @@ def read_magic_number(file_path: str) -> bool:
         return True
     else:
         return False
-

@@ -5,6 +5,7 @@ class Filter:
         Helper filter class. Accepts a list of single-argument
         functions that return True if object in list conforms to some criteria
     """
+
     def __init__(self, functions):
         self.functions = functions
 
@@ -13,6 +14,7 @@ class Filter:
             item for item in data
             if all(i(item) for i in self.functions)
         ]
+
 
 # example of usage:
 # positive_even = Filter(lamba a: a % 2 == 0, lambda a: a > 0, lambda a: isinstance(int, a)))
@@ -27,23 +29,24 @@ def make_filter(**keywords):
     for key, value in keywords.items():
         def keyword_filter_func(value):
             return value[key] == value
+
         filter_funcs.append(keyword_filter_func)
     return Filter(filter_funcs)
 
 
-sample_data  =  [
-     {
-         "name": "Bill",
-         "last_name": "Gilbert",
-         "occupation": "was here",
-         "type": "person",
-     },
-     {
-         "is_dead": True,
-         "kind": "parrot",
-         "type": "bird",
-         "name": "polly"
-     }
+sample_data = [
+    {
+        "name": "Bill",
+        "last_name": "Gilbert",
+        "occupation": "was here",
+        "type": "person",
+    },
+    {
+        "is_dead": True,
+        "kind": "parrot",
+        "type": "bird",
+        "name": "polly"
+    }
 ]
 
 # make_filter(name='polly', type='bird').apply(sample_data) should return only second entry from the list
