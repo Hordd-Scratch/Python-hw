@@ -27,7 +27,6 @@ def cache(times: int = 1) -> Callable:
 
 
 @cache(times=2)
-def square(a: float) -> str:
-    res = a * a
-    return res
+def square(a: float, b: float) -> str:
+    return (a ** b) ** 2
 
