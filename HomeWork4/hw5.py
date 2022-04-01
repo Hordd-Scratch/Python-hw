@@ -19,12 +19,21 @@ from typing import List, Generator
 
 # A generator that takes a number N as an input and returns N FizzBuzz numbers*
 def fizzbuzz(n: int) -> Generator[str, None, None]:
+    """
+        >>> list(fizzbuzz(5))
+        ['1', '2', 'fizz', '4', 'buzz']
+        >>> list(fizzbuzz(8))
+        ['1', '2', 'fizz', '4', 'buzz', 'fizz', '7', '8']
+        >>> list(fizzbuzz(10))
+        ['1', '2', 'fizz', '4', 'buzz', 'fizz', '7', '8', 'fizz', 'buzz']
+    """
     for i in range(1, n + 1):
         if i % 3 == 0 and i % 5 == 0:
-            yield "FizzBuzz"
+            yield "fizzbuzz"
         elif i % 3 == 0:
-            yield "Fizz"
+            yield "fizz"
         elif i % 5 == 0:
-            yield "Buzz"
+            yield "buzz"
         else:
             yield str(i)
+

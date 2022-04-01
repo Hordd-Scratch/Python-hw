@@ -36,14 +36,22 @@ from typing import List
 
 # A function that takes a number N as an input and returns N FizzBuzz numbers*
 def fizzbuzz(n: int) -> List[str]:
+    """
+        >>> fizzbuzz(5)
+        ['1', '2', 'fizz', '4', 'buzz']
+        >>> fizzbuzz(8)
+        ['1', '2', 'fizz', '4', 'buzz', 'fizz', '7', '8']
+        >>> fizzbuzz(10)
+        ['1', '2', 'fizz', '4', 'buzz', 'fizz', '7', '8', 'fizz', 'buzz']
+    """
     res = []
     for i in range(1, n + 1):
         if i % 3 == 0 and i % 5 == 0:
-            res.append("FizzBuzz")
+            res.append("fizzbuzz")
         elif i % 3 == 0:
-            res.append("Fizz")
+            res.append("fizz")
         elif i % 5 == 0:
-            res.append("Buzz")
+            res.append("buzz")
         else:
             res.append(str(i))
     return res
