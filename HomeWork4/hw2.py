@@ -30,7 +30,6 @@ You will learn:
 def read_magic_number(file_path: str) -> bool:
     file = open(file_path, 'r')
     line = file.readline()
-    print(line)
     file.close()
     try:
         num = float(line)
