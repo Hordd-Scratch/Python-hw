@@ -28,11 +28,10 @@ You will learn:
 
 # A function that checks the first line of a file for whether it is a number in an interval [1, 3)
 def read_magic_number(file_path: str) -> bool:
-    file = open(file_path, 'r')
-    line = file.readline()
-    file.close()
     try:
-        num = float(line)
+        with open(file_path, 'r') as file:
+            num = float(file.readline())
     except ValueError:
         return False
-    return 1 <= num < 3
+    finally:
+        return 1 <= num < 3
