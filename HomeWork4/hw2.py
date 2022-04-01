@@ -36,7 +36,4 @@ def read_magic_number(file_path: str) -> bool:
         num = float(line)
     except ValueError:
         return False
-    if 1 <= num < 3:
-        return True
-    else:
-        return False
+    return  1 <= num < 3
