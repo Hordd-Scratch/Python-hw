@@ -25,6 +25,7 @@ You will learn:
 """
 import sys
 
+
 # a function that will receive a string and write it to stderr
 # if line starts with "error" and to the stdout otherwise.
 def my_precious_logger(text: str):
