@@ -38,14 +38,12 @@ from typing import List
 def fizzbuzz(n: int) -> List[str]:
     res = []
     for i in range(1, n + 1):
-        step = str(i)
-        if i % 3 == 0:
-            step = "Fizz"
-            if i % 5 == 0:
-                step = "FizzBuzz"
-                res.append(step)
-                continue
-        if i % 5 == 0:
-            step = "Buzz"
-        res.append(step)
+        if i % 3 == 0 and i % 5 == 0:
+            res.append("FizzBuzz")
+        elif i % 3 == 0:
+            res.append("Fizz")
+        elif i % 5 == 0:
+            res.append("Buzz")
+        else:
+            res.append(str(i))
     return res
