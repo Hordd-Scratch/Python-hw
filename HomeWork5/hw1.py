@@ -38,6 +38,7 @@ PEP8 соблюдать строго.
 давать логичные подходящие имена.
 """
 import datetime
+import time
 from abc import ABC
 
 
@@ -90,4 +91,5 @@ if __name__ == '__main__':
     oop_homework.deadline  # 5 days, 0:00:00
 
     student.do_homework(oop_homework)
+    time.sleep(0.01)
     student.do_homework(expired_homework)  # You are late
