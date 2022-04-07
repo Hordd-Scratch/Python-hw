@@ -20,6 +20,7 @@ import functools
 from typing import Callable
 
 
+# A function that creates a decorator in a decorator that keeps information
 def decorator(func: Callable) -> Callable:
     def decorator_2(func_2: Callable) -> Callable:
         func_2.__doc__ = func.__doc__
@@ -36,6 +37,7 @@ def print_result(func):
         result = func(*args, **kwargs)
         print(result)
         return result
+
     return wrapper
 
 
