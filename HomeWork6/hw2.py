@@ -41,7 +41,51 @@ PEP8 соблюдать строго.
 давать логичные подходящие имена.
 """
 import datetime
+from abc import ABC
 from collections import defaultdict
+
+
+class Homework(ABC):
+    def __init__(self, text: str, deadline: datetime.timedelta):
+        self.text = text
+        self.deadline = deadline
+        self.created = datetime.datetime.now()
+
+    def is_active(self):
+        return self.created + self.deadline >= datetime.datetime.now()
+
+
+class Student(ABC):
+    def __init__(self, first_name: str, last_name: str):
+        self.last_name = last_name
+        self.first_name = first_name
+
+    def do_homework(self, hw: Homework) -> Homework:
+        if Homework.is_active(hw):
+            return hw
+        else:
+            raise TimeoutError('You are late')
+
+
+class Teacher(ABC):
+    def __init__(self, first_name: str, last_name: str):
+        self.last_name = last_name
+        self.first_name = first_name
+
+    def create_homework(self, text: str, days: int) -> Homework:
+        return Homework(text, datetime.timedelta(days))
+
+
+class HomeworkResult(ABC):
+    def __init__(self, author: Student, homework: Homework, solution: str, deadline: datetime.timedelta):
+        if isinstance(homework, Homework):
+            self.homework = homework
+            self.solution = solution
+            self.author = author
+            self.created = datetime.datetime.now()
+        else:
+            raise TypeError('You gave a not Homework object')
+
 
 if __name__ == '__main__':
     opp_teacher = Teacher('Daniil', 'Shadrin')
