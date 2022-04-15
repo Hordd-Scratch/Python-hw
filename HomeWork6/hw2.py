@@ -51,33 +51,31 @@ class Homework(ABC):
         self.deadline = deadline
         self.created = datetime.datetime.now()
 
-    def is_active(self):
+    def is_active(self) -> bool:
         return self.created + self.deadline >= datetime.datetime.now()
 
 
-class Student(ABC):
+class Human(ABC):
     def __init__(self, first_name: str, last_name: str):
         self.last_name = last_name
         self.first_name = first_name
 
+
+class DeadLineError(Exception):
+    def __init__(self, *args):
+        super().__init__(*args)
+
+
+class Student(Human):
     def do_homework(self, hw: Homework) -> Homework:
         if Homework.is_active(hw):
             return hw
         else:
-            raise TimeoutError('You are late')
-
-
-class Teacher(ABC):
-    def __init__(self, first_name: str, last_name: str):
-        self.last_name = last_name
-        self.first_name = first_name
-
-    def create_homework(self, text: str, days: int) -> Homework:
-        return Homework(text, datetime.timedelta(days))
+            raise DeadLineError('You are late')
 
 
 class HomeworkResult(ABC):
-    def __init__(self, author: Student, homework: Homework, solution: str, deadline: datetime.timedelta):
+    def __init__(self, author: Student, homework: Homework, solution: str):
         if isinstance(homework, Homework):
             self.homework = homework
             self.solution = solution
@@ -85,6 +83,23 @@ class HomeworkResult(ABC):
             self.created = datetime.datetime.now()
         else:
             raise TypeError('You gave a not Homework object')
+
+
+class Teacher(Human):
+    homework_done = defaultdict(lambda: [])
+
+    def create_homework(self, text: str, days: int) -> Homework:
+        return Homework(text, datetime.timedelta(days))
+
+    def check_homework(self, result: HomeworkResult) -> bool:
+        if len(result.solution) > 5:
+            Teacher.homework_done[result.homework].append(result)
+            return True
+        else:
+            return False
+
+    def reset_results(self, homework: Homework):
+        Teacher.homework_done.pop(homework)
 
 
 if __name__ == '__main__':
