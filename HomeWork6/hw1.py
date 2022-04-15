@@ -11,7 +11,6 @@ reset_instances_counter - сбросить счетчик экземпляров
 
 
 def instances_counter(cls):
-
     class res_class():
         _i = 0
 
@@ -37,10 +36,7 @@ class User:
 
 
 if __name__ == '__main__':
-    print(User.get_created_instances())
-    user, _, _ = User(), User(), User()  # 0
+    print(User.get_created_instances())  # 0
+    user, _, _ = User(), User(), User()
     print(user.get_created_instances())  # 3
     print(user.reset_instances_counter())  # 3
-
-
-

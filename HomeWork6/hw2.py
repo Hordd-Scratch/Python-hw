@@ -67,9 +67,9 @@ class DeadLineError(Exception):
 
 
 class Student(Human):
-    def do_homework(self, hw: Homework) -> Homework:
+    def do_homework(self, hw: Homework, solution: str) -> "HomeworkResult":
         if Homework.is_active(hw):
-            return hw
+            return HomeworkResult(self, hw, solution)
         else:
             raise DeadLineError('You are late')
 
@@ -98,8 +98,12 @@ class Teacher(Human):
         else:
             return False
 
-    def reset_results(self, homework: Homework):
-        Teacher.homework_done.pop(homework)
+    @staticmethod
+    def reset_results(homework: Homework = None):
+        if homework == None:
+            Teacher.homework_done.clear()
+        else:
+            Teacher.homework_done.pop(homework)
 
 
 if __name__ == '__main__':
