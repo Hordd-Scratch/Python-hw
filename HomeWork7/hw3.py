@@ -45,7 +45,7 @@ def tic_tac_toe_checker(board: List[List]) -> str:
         y_bool = True
 
     if y_bool and x_bool:
-        return 'draw'
+        return 'draw '
     elif y_bool:
         return 'y wins'
     elif x_bool:
