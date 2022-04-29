@@ -18,4 +18,3 @@ def supressor(*args: any):
 
 with supressor(IndexError):
     [][2]
-

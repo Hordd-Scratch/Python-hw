@@ -8,6 +8,7 @@ Tree can only contains basic structures like:
 """
 from typing import Any, List, Tuple
 
+
 def find_occurrences(tree: dict, element: Any) -> int:
     def find(root: any, counter: int) -> int:
         if isinstance(root, dict):
@@ -20,4 +21,5 @@ def find_occurrences(tree: dict, element: Any) -> int:
             if isinstance(node, dict) or isinstance(node, List) or isinstance(node, Tuple):
                 counter = find(node, counter)
         return counter
+
     return find(tree, 0)
