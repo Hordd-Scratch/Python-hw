@@ -20,36 +20,32 @@ from typing import List
 
 def tic_tac_toe_checker(board: List[List]) -> str:
     binar = [[0, 0, 0], [0, 0, 0], [0, 0, 0]]
-    res = ''
-    for y in range(3):
+    for o in range(3):
         for x in range(3):
-            if board[y][x] == '-':
+            if board[o][x] == '-':
                 return 'unfinished'
-            elif board[y][x] == 'o':
-                binar[y][x] = 0
-            elif board[y][x] == 'x':
-                binar[y][x] = 1
+            elif board[o][x] == 'o':
+                binar[o][x] = 0
+            elif board[o][x] == 'x':
+                binar[o][x] = 1
 
-    y_bool = False
+    o_bool = False
     x_bool = False
 
     for i in range(3):
         if binar[i][0] + binar[i][1] + binar[i][2] == 3 or binar[0][i] + binar[1][i] + binar[2][i] == 3:
             x_bool = True
         elif binar[i][0] + binar[i][1] + binar[i][2] == 0 or binar[0][i] + binar[1][i] + binar[2][i] == 0:
-            y_bool = True
+            o_bool = True
 
     if binar[0][0] + binar[1][1] + binar[2][2] == 3 or binar[0][2] + binar[1][1] + binar[2][0] == 3:
         x_bool = True
     if binar[0][0] + binar[1][1] + binar[2][2] == 0 or binar[0][2] + binar[1][1] + binar[2][0] == 0:
-        y_bool = True
+        o_bool = True
 
-    if y_bool and x_bool:
+    if o_bool and x_bool:
         return 'draw '
-    elif y_bool:
-        return 'y wins'
+    elif o_bool:
+        return 'o wins'
     elif x_bool:
         return 'x wins'
-
-
-print(tic_tac_toe_checker([['o', 'o', 'x'], ['x', 'o', 'x'], ['x', 'o', 'x']]))
