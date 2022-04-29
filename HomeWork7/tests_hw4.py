@@ -12,7 +12,7 @@ from hw4 import KeyValueStorage
                           ('meme', 'aboba'),
                           ('power', '9001'),
                           ('song', 'shadilay')])
-def test_KeyValueStorage_attributes_good(a, expected_result):
+def test_KeyValueStorage_attributes(a, expected_result):
     path = 'temp.txt'
     file = open(path, 'x')
     file.write(a + '=' + expected_result)
@@ -33,7 +33,7 @@ def test_KeyValueStorage_attributes_good(a, expected_result):
                           ('meme', 'aboba'),
                           ('power', '9001'),
                           ('song', 'shadilay')])
-def test_KeyValueStorage_dict_good(a, expected_result):
+def test_KeyValueStorage_dict(a, expected_result):
     path = 'temp.txt'
     file = open(path, 'x')
     file.write(a + '=' + expected_result)
