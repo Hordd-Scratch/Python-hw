@@ -3,7 +3,6 @@ import os
 from hw5 import merge_sorted_files
 
 
-
 @pytest.mark.parametrize("a, expected_result",
                          [([[1, 4, 7], [2, 5, 8], [3, 6, 9]], [1, 2, 3, 4, 5, 6, 7, 8, 9]),
                           ([[23, 43, 12], [32, 34, 45], [56, 67, 78]], [12, 23, 32, 34, 43, 45, 56, 67, 78]),
